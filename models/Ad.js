@@ -6,8 +6,9 @@ const adSchema = mongoose.Schema({
     title: String,
     price: Number,
     description: mongoose.Schema.Types.Mixed,
-    photo: String,
-    type: String,
+    cover: String,
+    pictures: Array,
+    type: Boolean,
     city: String 
 });
 

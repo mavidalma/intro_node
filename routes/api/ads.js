@@ -16,44 +16,29 @@ router.get('/', async(req, res, next) => {
     }
  })
 
- //post a pic
- router.post('/pic', upload.single('photo'), async(req, res, next) => {
-    try {
-     const picture = req.file;
+ //get unique ad
 
-     res.json({result:picture});
+ router.get('/:id', async(req, res, next) => {
+  try {
+      const _id = req.params.id;
+      const ads = await Ad.findOne({_id});
+      res.json({ads})
+  } catch(err) {
+      next(err);
+  }
+})
 
-    } catch(err) {
-        next(err)
-    }
-  
-  });
 
 
- //post ad with pic
- /*
- router.post('/create', upload.array('pictures', 4), async function(req, res, next) {
-    try {
-     const adData =  req.body;
-     const pictures = req.files.destination;
-     console.log(pictures);
-     console.log(req.files.destination)
-     const ad = new Ad(adData, pictures)
-     const savedAd = await ad.save();
+// Post Ad
 
-     res.json({result:savedAd});
-
-    } catch(err) {
-        next(err)
-    }
-  
-  });*/
-
-  router.post('/create', upload.single('photo'), async function(req, res, next) {
+  router.post('/create', upload.fields([{name: 'cover', maxCount: 1}, {name: 'pictures', maxCount: 8}]), async function(req, res, next) {
     try {
      const adData =  req.body;
-     const photo = req.file.path;
-     const ad = new Ad({...adData, photo})
+     const cover = req.files.cover ? req.files.cover[0].path : "";
+     const pictures = req.files.pictures ? req.files.pictures.map(item => item.path) : [];
+
+     const ad = new Ad({...adData, pictures, cover})
      const savedAd = await ad.save();
 
      res.json({result:savedAd});
@@ -63,22 +48,6 @@ router.get('/', async(req, res, next) => {
     }
   
   });
-
-//post an ad
-/*
-router.post('/create', async (req, res, next) => {
-    try {
-     const adData =  req.body;
-     const ad = new Ad(adData)
-     const savedAd = await ad.save();
-
-     res.json({result:savedAd});
-
-    } catch(err) {
-        next(err)
-    }
-  
-  });*/
 
   //update an Ad
 
@@ -91,6 +60,36 @@ router.post('/create', async (req, res, next) => {
       } catch(err) {
           next(err);
 ;      }
+  });
+
+   //update a cover of an ad
+ router.post('/cover/:id', upload.single('cover'), async(req, res, next) => {
+  try {
+    const _id = req.params.id;
+    const cover = {"cover": req.file.path};
+    console.log(cover);
+
+    const updatedAd = await Ad.findOneAndUpdate(_id, cover, {new:false});
+    res.json({success: `Ad ${_id} updated`, changes: updatedAd})
+  
+  } catch(err) {
+      next(err)
+  }
+
+});
+
+   //update pictures of an ad
+   router.post('/pics/:id', upload.array('pictures', 8), async(req, res, next) => {
+    try {
+      const _id = req.params.id;
+      const pictures = {"pictures": req.files.map(item => item.path)};
+      const updatedAd = await Ad.findOneAndUpdate(_id, pictures, {new:true});
+      res.json({success: `Ad ${_id} updated`, changes: updatedAd})
+    
+    } catch(err) {
+        next(err)
+    }
+  
   });
 
   router.delete('/:id', async (req, res, next) => {
