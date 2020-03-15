@@ -23,7 +23,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //api routes
 
-app.use('/ads', require('./routes/api/ads'));
+app.use('/api/ads', require('./routes/api/ads'));
+app.use('/api/user', require('./routes/api/users'))
 
 
 //website routes

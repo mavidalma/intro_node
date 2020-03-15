@@ -43,6 +43,8 @@ router.get('/', async(req, res, next) => {
 
      res.json({result:savedAd});
 
+     //ad user id to ad reading cookie from login
+
     } catch(err) {
         next(err)
     }
@@ -55,6 +57,9 @@ router.get('/', async(req, res, next) => {
       try{
         const adData = req.body;
         const _id = req.params.id;
+
+        //check user reading cookie from login
+
         const updatedAd = await Ad.findOneAndUpdate(_id, adData, {new:true});
         res.json({success: `Ad ${_id} updated`, changes: updatedAd})
       } catch(err) {
@@ -65,6 +70,8 @@ router.get('/', async(req, res, next) => {
    //update a cover of an ad
  router.post('/cover/:id', upload.single('cover'), async(req, res, next) => {
   try {
+
+    //check user reading cookie from login
     const _id = req.params.id;
     const cover = {"cover": req.file.path};
     console.log(cover);
@@ -81,6 +88,7 @@ router.get('/', async(req, res, next) => {
    //update pictures of an ad
    router.post('/pics/:id', upload.array('pictures', 8), async(req, res, next) => {
     try {
+      //check user reading cookie from login
       const _id = req.params.id;
       const pictures = {"pictures": req.files.map(item => item.path)};
       const updatedAd = await Ad.findOneAndUpdate(_id, pictures, {new:true});
@@ -94,6 +102,7 @@ router.get('/', async(req, res, next) => {
 
   router.delete('/:id', async (req, res, next) => {
     try{
+      //check user reading cookie from login
         const _id = req.params.id
         const erased = await Ad.deleteOne({_id});
         console.log(erased);
