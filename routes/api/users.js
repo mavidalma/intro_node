@@ -11,6 +11,7 @@ router.get('/login', async(req, res, next) => {
         const password = req.body.password;
 
         const validated = await User.find({username, password});
+        console.log(validated);
 
         if (validated[0] === undefined) {
             const err = new Error('user not found or password incorrect');
@@ -18,7 +19,7 @@ router.get('/login', async(req, res, next) => {
             return next(err);
           }
 
-        //set cookie with user id to give access to user's ads (to modify or delete)
+        res.cookie('user', validated[0]._id);
 
         res.json({validated})
 
