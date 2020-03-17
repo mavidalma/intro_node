@@ -11,7 +11,6 @@ router.get('/login', async(req, res, next) => {
         const password = req.body.password;
 
         const validated = await User.find({username, password});
-        console.log(validated);
 
         if (validated[0] === undefined) {
             const err = new Error('user not found or password incorrect');

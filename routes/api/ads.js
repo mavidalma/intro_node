@@ -24,7 +24,19 @@ router.all('*', (req, res, next) => {
 //show ads
 router.get('/', async(req, res, next) => {
     try {
-        const ads = await Ad.find();
+      const query = {};
+      console.log(req.query)
+      
+
+      req.query.title ? query.title = req.query.title : "";
+      req.query.description ? query.description = req.query.description : "";
+      req.query.city ? query.city = req.query.city : "";
+     // const minPrice = ver para sacar max y min;
+     const tags = req.query.tags;
+     console.log(query)
+     
+
+        const ads = await Ad.filter(query);
         res.json({ads})
     } catch(err) {
         next(err);
