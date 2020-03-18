@@ -25,18 +25,24 @@ router.all('*', (req, res, next) => {
 router.get('/', async(req, res, next) => {
     try {
       const query = {};
-      console.log(req.query)
-      
 
       req.query.title ? query.title = req.query.title : "";
       req.query.description ? query.description = req.query.description : "";
       req.query.city ? query.city = req.query.city : "";
-     // const minPrice = ver para sacar max y min;
-     const tags = req.query.tags;
+      req.query.type ? query.type = req.query.type : "";
+      req.query.tags ? query.tags = req.query.tags : "";
+
+      const priceSplited = req.query.price.split("-");
+      priceSplited[0] > 0 ? query.price = {$gt: priceSplited[0]} : query.price = {$gt: 0};
+      priceSplited[1] > 0 ? query.price.$lt = priceSplited[1] : "";
+
+      const limit = parseInt(req.query.limit);
+      const skip = parseInt(req.query.skip);
+     
      console.log(query)
      
 
-        const ads = await Ad.filter(query);
+        const ads = await Ad.filter(query, limit, skip);
         res.json({ads})
     } catch(err) {
         next(err);
