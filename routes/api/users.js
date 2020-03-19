@@ -9,6 +9,7 @@ router.get('/login', async(req, res, next) => {
 
         const username = req.body.username;
         const password = req.body.password;
+        const rememberMe = req.body.remember;
 
         const validated = await User.find({username, password});
 
@@ -18,7 +19,13 @@ router.get('/login', async(req, res, next) => {
             return next(err);
           }
 
-        res.cookie('user', validated[0]._id);
+        if (rememberMe) {
+            res.cookie('user', validated[0]._id, { expires: new Date(Date.now() + 900000)});
+        } else {
+            res.cookie('user', validated[0]._id);
+        }
+
+        
 
         res.json({validated})
 
