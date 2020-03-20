@@ -10,7 +10,8 @@ const adSchema = mongoose.Schema({
     pictures: Array,
     type: Boolean,
     city: String, 
-    tags: [],
+    tags: Array,
+    user: String,
 });
 
 //METHODS

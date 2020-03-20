@@ -4,22 +4,21 @@ var express = require('express');
 var router = express.Router();
 const Ad = require('../../models/Ad');
 const multer = require('multer');
-const upload = multer({dest: './public/ad_pics/'})
+var path = require('path');
+//const user = req.cookies.user VER SI ASÍ FUNCIONAN LOS CHECKERS
 
-
-//cookie checker
-
-router.all('*', (req, res, next) => {
-  console.log('Cookies: ', req.cookies);
-  
-  if (!req.cookies.user) {
-    const err = new Error('user not logged');
-    err.status = 401;
-    return next(err);
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './public/ad_pics/')
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname))
   }
-  next();
-
 })
+const upload = multer({storage: storage})
+
+//const upload = multer({dest: './public/ad_pics/'})
+
 
 //show ads
 router.get('/', async(req, res, next) => {
@@ -32,9 +31,11 @@ router.get('/', async(req, res, next) => {
       req.query.type ? query.type = req.query.type : "";
       req.query.tags ? query.tags = req.query.tags : "";
 
+      if(req.query.price) {
       const priceSplited = req.query.price.split("-");
       priceSplited[0] > 0 ? query.price = {$gt: priceSplited[0]} : query.price = {$gt: 0};
       priceSplited[1] > 0 ? query.price.$lt = priceSplited[1] : "";
+      }
 
       const limit = parseInt(req.query.limit);
       const skip = parseInt(req.query.skip);
@@ -61,17 +62,33 @@ router.get('/', async(req, res, next) => {
   }
 })
 
+//cookie checker
+
+router.all('*', (req, res, next) => {
+  console.log('Cookies: ', req.cookies);
+
+  if (!req.cookies.user) {
+    const err = new Error('user not logged');
+    err.status = 401;
+    return next(err);
+  }
+
+  next();
+
+})
 
 // Post Ad
 
   router.post('/create', upload.fields([{name: 'cover', maxCount: 1}, {name: 'pictures', maxCount: 8}]), async function(req, res, next) {
     try {
      const adData =  req.body;
-     const cover = req.files.cover ? req.files.cover[0].path : "";
+     const cover = req.files.cover ? 'ad_pics/' + req.files.cover[0].filename : "";
      const pictures = req.files.pictures ? req.files.pictures.map(item => item.path) : [];
-
-     const ad = new Ad({...adData, pictures, cover})
+     const user = req.cookies.user
+     const ad = new Ad({...adData, pictures, cover, user})
      const savedAd = await ad.save();
+
+     console.log(user)
 
      res.json({result:savedAd});
 
@@ -89,11 +106,19 @@ router.get('/', async(req, res, next) => {
       try{
         const adData = req.body;
         const _id = req.params.id;
+        const user = req.cookies.user;
 
         //cross check userid on ad and user cookie to alow update
-
-        const updatedAd = await Ad.findOneAndUpdate(_id, adData, {new:true});
-        res.json({success: `Ad ${_id} updated`, changes: updatedAd})
+      
+        const ad = await Ad.findOne({_id});
+        if (ad.user === user) {
+          const updatedAd = await Ad.findOneAndUpdate(_id, adData, {new:true});
+          res.json({success: `Ad ${_id} updated`, changes: updatedAd})
+        } else {
+         const err = new Error('You have no permission to update this ad');
+          err.status = 401;
+          return next(err)
+        }
       } catch(err) {
           next(err);
 ;      }
@@ -102,14 +127,19 @@ router.get('/', async(req, res, next) => {
    //update a cover of an ad
  router.post('/cover/:id', upload.single('cover'), async(req, res, next) => {
   try {
-
-    //cross check userid on ad and user cookie to alow update
     const _id = req.params.id;
-    const cover = {"cover": req.file.path};
-    console.log(cover);
+    const cover = {"cover": 'ad_pics/' + req.file.filename};
+    const ad = await Ad.findOne({_id});
+    const user = req.cookies.user;
 
-    const updatedAd = await Ad.findOneAndUpdate(_id, cover, {new:false});
-    res.json({success: `Ad ${_id} updated`, changes: updatedAd})
+    if (ad.user === user) {
+      const updatedAd = await Ad.findOneAndUpdate(_id, cover, {new:false});
+      res.json({success: `Ad ${_id} updated`, changes: updatedAd})
+    } else {
+     const err = new Error('You have no permission to update this ad');
+      err.status = 401;
+      return next(err)
+    }
   
   } catch(err) {
       next(err)
@@ -120,12 +150,21 @@ router.get('/', async(req, res, next) => {
    //update pictures of an ad
    router.post('/pics/:id', upload.array('pictures', 8), async(req, res, next) => {
     try {
-      //cross check userid on ad and user cookie to alow update
+      //it overwrites ALL previous pictures with the ones posted. Might refactor
       const _id = req.params.id;
-      const pictures = {"pictures": req.files.map(item => item.path)};
+      const ad = await Ad.findOne({_id});
+      const pictures = {"pictures": req.files.map(item => 'ad_pics/' + item.filename)};
+      const user = req.cookies.user;
+
+
+      if (ad.user === user) {
       const updatedAd = await Ad.findOneAndUpdate(_id, pictures, {new:true});
       res.json({success: `Ad ${_id} updated`, changes: updatedAd})
-    
+      } else {
+        const err = new Error('You have no permission to update this ad');
+        err.status = 401;
+        return next(err)
+      }
     } catch(err) {
         next(err)
     }
@@ -134,15 +173,23 @@ router.get('/', async(req, res, next) => {
 
   router.delete('/:id', async (req, res, next) => {
     try{
-      //cross check userid on ad and user cookie to alow update
-        const _id = req.params.id
+        const ad = await Ad.findOne({_id});
+        const user = req.cookies.user;
+        const _id = req.params.id;
+
+        if (ad.user === user) {
         const erased = await Ad.deleteOne({_id});
         console.log(erased);
         res.json({result: "OK", "Ad removed": _id})
+        } else {
+        const err = new Error('You have no permission to update this ad');
+        err.status = 401;
+        return next(err)
+        }
+        
     } catch(err) {
         next(err)
     }
 })
-
 
   module.exports = router;
