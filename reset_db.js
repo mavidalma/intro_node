@@ -3,15 +3,17 @@
 const conn = require('./lib/connectMongoose');
 const Ad = require('./models/Ad');
 const User = require('./models/User');
+//require('mongodb');
 
 conn.once('open', async() => {
     try{
        await initAds();
        await initUsers();
+       //db.ads.createIndex({description: 'text'});
        conn.close();
     
     } catch(err) {
-        console.error("ther has been an error reinitializing th DB: ", err);
+        console.error("there has been an error reinitializing the DB: ", err);
         process.exit(1);
     }
 })
@@ -41,7 +43,7 @@ const initAds = async() => {
         "tags": ["lifestyle"],
         "user": "5e6e8e074763f31a1ad53674"
     },
- ])
+ ]);
 };
 
 const initUsers = async() => {

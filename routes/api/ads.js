@@ -26,10 +26,10 @@ router.get('/', async(req, res, next) => {
       const query = {};
 
       req.query.title ? query.title = req.query.title : "";
-      req.query.description ? query.description = req.query.description : "";
       req.query.city ? query.city = req.query.city : "";
       req.query.type ? query.type = req.query.type : "";
       req.query.tags ? query.tags = req.query.tags : "";
+      req.query.description ? query.$text = {$search: req.query.description} : "";
 
       if(req.query.price) {
       const priceSplited = req.query.price.split("-");
@@ -39,11 +39,13 @@ router.get('/', async(req, res, next) => {
 
       const limit = parseInt(req.query.limit);
       const skip = parseInt(req.query.skip);
+      const sort = req.query.sort;
+      const select = req.query.select;
      
      console.log(query)
      
 
-        const ads = await Ad.filter(query, limit, skip);
+        const ads = await Ad.filter(query, limit, skip, sort, select);
         res.json({ads})
     } catch(err) {
         next(err);
