@@ -5,7 +5,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./bin/www",
     "dev": "cross-env DEBUG=practica:* NODE_ENV=development nodemon ./bin/www",
-    "reset_db": "node reset_db.js"
+    "reset_db": "node reset_db.js",
+    "pic_remove": "node picture_remover.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",

@@ -4,6 +4,7 @@ var express = require('express');
 var router = express.Router();
 const Ad = require('../../models/Ad');
 const multer = require('multer');
+const fs = require('fs');
 var path = require('path');
 //const user = req.cookies.user VER SI ASÍ FUNCIONAN LOS CHECKERS
 
@@ -99,7 +100,7 @@ router.all('*', (req, res, next) => {
     try {
      const adData =  req.body;
      const cover = req.files.cover ? 'ad_pics/' + req.files.cover[0].filename : "";
-     const pictures = req.files.pictures ? req.files.pictures.map(item => item.path) : [];
+     const pictures = req.files.pictures ? req.files.pictures.map(item => 'ad_pics/' + item.filename) : [];
      const user = req.cookies.user
      const ad = new Ad({...adData, pictures, cover, user})
      const savedAd = await ad.save();
@@ -189,19 +190,23 @@ router.all('*', (req, res, next) => {
 
   router.delete('/:id', async (req, res, next) => {
     try{
+      const _id = req.params.id;
+      const user = req.cookies.user;
         const ad = await Ad.findOne({_id});
-        const user = req.cookies.user;
-        const _id = req.params.id;
-
+        const cover = ad.cover;
+        const pictures = ad.pictures;
+        const allPics = [...pictures, cover];
+        
         if (ad.user === user) {
-        const erased = await Ad.deleteOne({_id});
-        console.log(erased);
+        allPics.forEach(path => fs.unlinkSync('./public/' + path));
+        await Ad.deleteOne({_id});
+      
         res.json({result: "OK", "Ad removed": _id})
         } else {
         const err = new Error('You have no permission to update this ad');
         err.status = 401;
         return next(err)
-        }
+       }
         
     } catch(err) {
         next(err)
