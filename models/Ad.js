@@ -19,7 +19,7 @@ const adSchema = mongoose.Schema({
 //filter
 adSchema.statics.filter = function (filter, limit, skip, sort, fields) {
     return Ad.find(filter).limit(limit).skip(skip).sort(sort).select(fields);
-}
+};
 
 const Ad = mongoose.model('Ad',adSchema);
 

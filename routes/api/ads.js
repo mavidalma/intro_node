@@ -52,6 +52,18 @@ router.get('/', async(req, res, next) => {
     }
  })
 
+ router.get('/tags', async (req, res, next) => {
+  try{
+    console.log(req)
+    const tags = await Ad.distinct("tags");
+    console.log(tags)
+    res.json({tags});
+
+  } catch(err) {
+    next(err);
+  }
+})
+
  //get unique ad
 
  router.get('/:id', async(req, res, next) => {
@@ -63,6 +75,8 @@ router.get('/', async(req, res, next) => {
       next(err);
   }
 })
+
+
 
 //cookie checker
 
