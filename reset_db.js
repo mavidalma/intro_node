@@ -50,7 +50,6 @@ const initUsers = async() => {
     await User.deleteMany();
     await User.insertMany([
         {
-            "ads": ["5e6959c1b244f42c599d014d", "5e6bf231992d1b176ff18e33"],
             "_id": "5e6e8e074763f31a1ad53674",
             "username": "Admin",
             "password": "admin",

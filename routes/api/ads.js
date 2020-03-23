@@ -109,7 +109,7 @@ router.all('*', (req, res, next) => {
 
      res.json({result:savedAd});
 
-     //ad user id to ad
+     //ad user id to the ad by editing it into the USER collection
 
     } catch(err) {
         next(err)
@@ -124,18 +124,19 @@ router.all('*', (req, res, next) => {
         const adData = req.body;
         const _id = req.params.id;
         const user = req.cookies.user;
-
-        //cross check userid on ad and user cookie to alow update
       
         const ad = await Ad.findOne({_id});
+
         if (ad.user === user) {
           const updatedAd = await Ad.findOneAndUpdate(_id, adData, {new:true});
           res.json({success: `Ad ${_id} updated`, changes: updatedAd})
+
         } else {
          const err = new Error('You have no permission to update this ad');
           err.status = 401;
           return next(err)
         }
+        
       } catch(err) {
           next(err);
 ;      }
