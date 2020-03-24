@@ -58,7 +58,7 @@ router.get('/', async(req, res, next) => {
     console.log(req)
     const tags = await Ad.distinct("tags");
     console.log(tags)
-    res.json({tags});
+    res.json({success: true, tags});
 
   } catch(err) {
     next(err);
@@ -70,8 +70,8 @@ router.get('/', async(req, res, next) => {
  router.get('/:id', async(req, res, next) => {
   try {
       const _id = req.params.id;
-      const ads = await Ad.findOne({_id});
-      res.json({ads})
+      const ad = await Ad.findOne({_id});
+      res.json({ad})
   } catch(err) {
       next(err);
   }
@@ -107,7 +107,7 @@ router.all('*', (req, res, next) => {
 
      console.log(user)
 
-     res.json({result:savedAd});
+     res.json({success: true, ad:savedAd});
 
      //ad user id to the ad by editing it into the USER collection
 
@@ -129,7 +129,7 @@ router.all('*', (req, res, next) => {
 
         if (ad.user === user) {
           const updatedAd = await Ad.findOneAndUpdate(_id, adData, {new:true});
-          res.json({success: `Ad ${_id} updated`, changes: updatedAd})
+          res.json({success: `${_id}`, changes: updatedAd})
 
         } else {
          const err = new Error('You have no permission to update this ad');
@@ -152,7 +152,7 @@ router.all('*', (req, res, next) => {
 
     if (ad.user === user) {
       const updatedAd = await Ad.findOneAndUpdate(_id, cover, {new:false});
-      res.json({success: `Ad ${_id} updated`, changes: updatedAd})
+      res.json({success: true, ad: _id, path: cover})
     } else {
      const err = new Error('You have no permission to update this ad');
       err.status = 401;
@@ -177,7 +177,7 @@ router.all('*', (req, res, next) => {
 
       if (ad.user === user) {
       const updatedAd = await Ad.findOneAndUpdate(_id, pictures, {new:true});
-      res.json({success: `Ad ${_id} updated`, changes: updatedAd})
+      res.json({success: true, Ad:_id, pictures: updatedAd.pictures})
       } else {
         const err = new Error('You have no permission to update this ad');
         err.status = 401;
@@ -202,7 +202,7 @@ router.all('*', (req, res, next) => {
         allPics.forEach(path => fs.unlinkSync('./public/' + path));
         await Ad.deleteOne({_id});
       
-        res.json({result: "OK", "Ad removed": _id})
+        res.json({success: true, "deleted": _id})
         } else {
         const err = new Error('You have no permission to update this ad');
         err.status = 401;

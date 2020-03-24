@@ -54,29 +54,62 @@ The ADS will have the following keys and value types:
 User administration is divided on two methods: register an user and login into the platform
 
 #### REGISTER
+```sh
+Endpoint: https://localhost:3000/api/user/register
+Request method: POST
 
-Route: https://localhost:3000/api/user/register
-POST method --> URLencoded
-
+Headers:
+{
+    content-type: application-URLencoded
+}
 Body:
-| key | value (type) |
-| ------ | ------ |
-| username | String |
-| password | String |
+{
+    username: String,
+    password: String,
+}
 
+response type: Json
+{
+    "success": true,
+    "newUser": {
+        "_id",
+        "username",
+        "password",
+        "__v",
+    }
+}
+
+```
 #### Login
+```sh
+Endpoint: https://localhost:3000/api/user/login
+Request method: GET
 
-Route: https://localhost:3000/api/user/login
-POST method --> URLencoded
+Headers:
+{
+    content-type: application-URLencoded
+}
 
 Body:
-| key | value (type) |
-| ------ | ------ |
-| username | String |
-| password | String |
-| remember [optional] | Boolean |
-
 you can add an optional remember me option by adding a remember key. It will extend the cookie for 3 months. By default it will be a session cookie
+{
+    username: String,
+    password: String,
+    [remember: boolean]
+}
+
+response type: Json
+{
+    "success": true,
+    "user": {
+        "_id",
+        "username",
+        "password",
+        "__v",
+    }
+}
+
+```
 
 ### AD Management
 The APP covers the CRUD basics plus methods to manage pictures.
@@ -88,7 +121,6 @@ Request method: GET
 response type: Json
 
 response: {
-    success: true,
     ads: [{
         title: title,
         description: description,
@@ -96,6 +128,22 @@ response: {
     }]
 }
 ```
+You can filter, limit & skip (for pagination), order and select displayed fields by passing the following query params:
+
+| filter | query | example |
+| ------ | ------ | ----------- |
+| title | exact match | title=coche
+| Description | indexed (will search coincidences on every field)| description = log lake big
+| price | Number (from - to) | price=100-600 // price=-600 // price=100-
+| Tags | Array | tags= lifestyle motor realstate
+| Type | Boolean (true =sell -- false = buy)|type=true
+| City | String | city=Madrid
+
+Example: 
+https://localhost3000:api/ads?title=car&price=-20000&city=Madrid
+Will display ads with the title including "car" with a max. price of 20000 and with city Madrid.
+**Queries are case sensitive**
+
 #### Display single Ad
 ```sh
 Endpoint: https://localhost:3000/api/ads/:id
@@ -113,41 +161,142 @@ response: {
 ```
 
 #### Post AD (login required)
+
+It does not require any field. 
+
 ```sh
 Endpoint: https://localhost:3000/api/ads/create
 Request method: POST
-response type: Json
-Headers {
+
+Headers: 
+{
     content-type: 'application/form-data'
 }
+body:
+{
+    title: string,
+    description: String,
+    price: Number,
+    Tags: Array,
+    Cover: file,
+    pictures: file (max. 8 files) stored in array
+    Type: Boolean,
+    city: String
+}
 
-response: {
-    sucess: true,
-    ad: {
-        title: title,
-        description: description,
-        etc
+
+response type: Json
+{
+    "success": true,
+    "ad": {
+        "pictures": [],
+        "tags": [],
+        "_id",
+        "title",
+        "price",
+        "type",
+        "cover",
+        "user",
+        "__v"
     }
 }
 ```
 #### Edit AD (login required)
+
+Use it to edit an ad info. For picture management there are especific methods.
 ```sh
-Endpoint: Route --> https://localhost:3000/api/ads/:id
-Request method: POST
-response type: Json
-Headers {
-    content-type: 'application/form-URLencoded'
+Endpoint: https://localhost:3000/api/ads/:id
+Request method: PUT
+
+Headers 
+{
+    content-type: 'application/x-www-form-urlencoded'
+}
+Body
+{
+    key: value
 }
 
-response: {
-    sucess: true,
-    ad: {
+response type: Json
+{
+    "sucess": _id,
+    "changes": {
         title: title,
         description: description,
-        etc
+        ...
     }
 }
 ```
 #### Delete AD (login required)
+```sh
+Endpoint: https://localhost:3000/api/ads/:id
+Request method: DELETE
+
+Headers {
+    content-type: 'application/x-www-form-urlencoded'
+}
+
+response type: Json
+{
+    "sucess": true,
+    "deleted": _id
+}
+```
 #### Update cover picture (login required)
+```sh
+Endpoint: https://localhost:3000/api/ads/cover/:id
+Request method: POST
+
+Headers 
+{
+    content-type: 'application/form-data'
+}
+Body:
+{
+    "pictures": [files]
+}
+
+response type: Json
+{
+    "success": true,
+    "ad": _id,
+    "path": {
+        "cover": "ad_pics/file.extension"
+    }
+}
+```
+
 #### Add pictures to an AD -max. 8 pics per Ad- (login required)
+This method overwrites all previous pictures with the following pictures. Should you want to include previous pictures, add them to the request
+```sh
+Endpoint: https://localhost:3000/api/ads/pics/:id
+Request method: POST
+
+Headers 
+{
+    content-type: 'application/form-data'
+}
+Body:
+{
+    "pictures": [files]
+}
+
+response type: Json
+{
+    "success": true,
+    "ad": _id,
+    "pictures": [paths]
+}
+```
+#### Get available tags
+```sh
+Endpoint: https://localhost:3000/api/ads/tags
+Request method: GET
+response type: Json
+
+response: {
+    sucess: true,
+    tags: [tags]
+}
+```
+# Enjoy! 

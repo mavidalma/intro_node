@@ -27,7 +27,7 @@ router.get('/login', async(req, res, next) => {
 
         
 
-        res.json({validated})
+        res.json({success: true, user:validated[0]})
 
     } catch(err) {
         next(err);
@@ -43,7 +43,7 @@ router.post('/register', async(req, res, next) => {
     const newUser = await user.save();
 
 
-    res.json({response: "success", newUser});
+    res.json({success: true, newUser});
     } catch(err) {
         next(err);
     }
