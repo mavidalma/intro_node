@@ -29,8 +29,10 @@ router.get('/', async(req, res, next) => {
       req.query.title ? query.title = req.query.title : "";
       req.query.city ? query.city = req.query.city : "";
       req.query.type ? query.type = req.query.type : "";
-      req.query.tags ? query.tags = req.query.tags : "";
       req.query.description ? query.$text = {$search: req.query.description} : "";
+
+      const tagsArray = req.query.tags.split(" ");
+      req.query.tags ? query.tags = {$in: tagsArray} : "";
 
       if(req.query.price) {
       const priceSplited = req.query.price.split("-");

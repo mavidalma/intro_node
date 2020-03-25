@@ -177,7 +177,7 @@ body:
     title: string,
     description: String,
     price: Number,
-    Tags: Array,
+    Tags: Array, **words without spacing, otherwise the Api will consider every word a different tag when qerying**
     Cover: file,
     pictures: file (max. 8 files) stored in array
     Type: Boolean,

@@ -1,0 +1,9 @@
+body {
+    background-color: darkslategrey;
+}
+.logo {
+    font-size: 24px;
+    color: white;
+    display: block;
+    align-self: center;
+}
