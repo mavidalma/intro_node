@@ -31,8 +31,10 @@ router.get('/', async(req, res, next) => {
       req.query.type ? query.type = req.query.type : "";
       req.query.description ? query.$text = {$search: req.query.description} : "";
 
-      const tagsArray = req.query.tags.split(" ");
-      req.query.tags ? query.tags = {$in: tagsArray} : "";
+      if (req.query.tags) {
+        const tagsArray = req.query.tags.split(" ");
+        query.tags = {$in: tagsArray}
+      }
 
       if(req.query.price) {
       const priceSplited = req.query.price.split("-");

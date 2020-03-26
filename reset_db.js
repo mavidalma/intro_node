@@ -22,24 +22,20 @@ const initAds = async() => {
  await Ad.deleteMany();
  await Ad.insertMany([
     {
-        "pictures": [],
         "_id": "5e6bf231992d1b176ff18e33",
         "title": "Peluche",
         "price": 6,
         "city": "Madrid",
         "description": "A log in the lake",
-        "cover": "public/ad_pics/18953a1f0b55f9729d496103302231b4",
         "tags": [],
         "user": "5e6e8e074763f31a1ad53674"
     },
     {
-        "pictures": [],
         "_id": "5e6959c1b244f42c599d014d",
         "title": "cabaña",
         "price": 6000,
         "city": "Vigo",
         "description": "A log in the lake",
-        "cover": "",
         "tags": ["lifestyle"],
         "user": "5e6e8e074763f31a1ad53674"
     },
