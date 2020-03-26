@@ -35,7 +35,7 @@ router.get('/', async function(req, res, next) {
       }  
     })
     
-    res.render('index', { 
+    res.render('view', { 
       title: 'AnunciaLOL',
       ads
     });

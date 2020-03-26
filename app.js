@@ -13,7 +13,8 @@ require('./lib/connectMongoose')
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.set('view engine', 'html');
+app.engine('html', require('ejs').__express);
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -28,8 +29,8 @@ app.use('/api/user', require('./routes/api/users'))
 
 
 //website routes
-
 app.use('/',      require('./routes/index'));
+app.use('/view',      require('./routes/view'));
 app.use('/users', require('./routes/users'));
 
 // catch 404 and forward to error handler

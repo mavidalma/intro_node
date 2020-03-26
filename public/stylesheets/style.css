@@ -6,3 +6,25 @@ body {
 a {
   color: #00B7FF;
 }
+.ads-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: flex-start;
+  margin-top: 140px;
+}
+nav {
+  display: fixed;
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  padding: 10px;
+  color: white;
+  border-bottom: 1px solid white;
+
+}
+nav p {
+  font-size: 1.25rem;
+}
