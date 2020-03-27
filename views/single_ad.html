@@ -15,19 +15,17 @@
       <p>Go ahead and pass as many queries as you want directly on your browser's searchbar</p>
     </nav>
 
-    <div class = "ads-container">
-    <% ads.forEach(item => { %>
-      <div class="card" style="width: 18rem;">
-        <img src="<%= item.cover %>" class="card-img-top" alt="cover picture">
-        <div class="card-body">
-          <h5 class="card-title"><%= item.title %></h5>
-          <p class="card-text">description: <%= item.description %></p>
-          <p class="card-price">price: <%= item.price %>€</p>
-          <p class="card-text">tags: <%= item.tags %></p>
-          <a href="http://localhost:3000/view/<%= item._id %>" class="btn btn-primary">Go somewhere</a>
-        </div>
-      </div>
-      <% }) %>
+    <div class="ad-wrapper">
+        <div class="card" style="width: 18rem;">
+            <img src="<%= ad.cover %>" class="card-img-top" alt="cover picture">
+            <div class="card-body">
+              <h4 class="card-title"><%= ad.title %></h4>
+              <p class="card-text">description: <%= ad.description %></p>
+              <p class="card-price">price: <%= ad.price %>€</p>
+              <p class="card-text">tags: <%= ad.tags %></p>
+              <a href="http://localhost:3000/view" class="btn btn-primary">Return to Ads Board</a>
+            </div>
+          </div>    
     </div>
 
     

@@ -28,3 +28,18 @@ nav {
 nav p {
   font-size: 1.25rem;
 }
+
+/* single ad styles */
+
+.ad-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 140px;
+}
+
+h4 {
+  border-bottom: 1px solid black;
+}

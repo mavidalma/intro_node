@@ -22,6 +22,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//global variables
+app.locals.title = 'AnunciaLOL';
+
 //api routes
 
 app.use('/api/ads', require('./routes/api/ads'));

@@ -36,12 +36,25 @@ router.get('/', async function(req, res, next) {
     })
     
     res.render('view', { 
-      title: 'AnunciaLOL',
       ads
     });
   } catch(err) {
       next(err);
   }
 });
+
+router.get('/:id', async(req, res, next) => {
+  try {
+      const _id = req.params.id;
+      const ad = await Ad.findOne({_id});
+      !ad.cover ? ad.cover = "../fallback_pic/no-image.png" : "";
+      res.render('single_ad',{ad});
+  } catch(err) {
+      next(err);
+  }
+})
+
+
+
 
 module.exports = router;
