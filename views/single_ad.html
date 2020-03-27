@@ -16,13 +16,22 @@
     </nav>
 
     <div class="ad-wrapper">
-        <div class="card" style="width: 18rem;">
+        <div class="card single-card" style="width: 18rem;">
             <img src="<%= ad.cover %>" class="card-img-top" alt="cover picture">
             <div class="card-body">
               <h4 class="card-title"><%= ad.title %></h4>
               <p class="card-text">description: <%= ad.description %></p>
               <p class="card-price">price: <%= ad.price %>€</p>
               <p class="card-text">tags: <%= ad.tags %></p>
+
+              <% if(ad.pictures.length > 0) { %> 
+
+                <div class="pics-grid">
+                   <% ad.pictures.map((pic, index) => { %>
+                    <img src="../<%= pic %>" id="<%= index %>-pic" class="ad-picture">
+                <%  })%>
+              <%  } %>
+
               <a href="http://localhost:3000/view" class="btn btn-primary">Return to Ads Board</a>
             </div>
           </div>    

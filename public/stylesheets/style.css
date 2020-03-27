@@ -40,6 +40,16 @@ nav p {
   margin-top: 140px;
 }
 
-h4 {
-  border-bottom: 1px solid black;
+.ad-wrapper .single-card {
+  min-width: 70vw;
 }
+
+.single-card .pics-grid {
+  overflow: hidden;
+}
+
+.pics-grid .ad-picture {
+  max-width: 100%;
+  margin: 15px auto;
+}
+

@@ -47,7 +47,11 @@ router.get('/:id', async(req, res, next) => {
   try {
       const _id = req.params.id;
       const ad = await Ad.findOne({_id});
-      !ad.cover ? ad.cover = "../fallback_pic/no-image.png" : "";
+      !ad.cover ? ad.cover = "../fallback_pic/no-image.png" : ad.cover = "../" + ad.cover;
+      if(ad.pictures.length > 0) {
+        ad.pictures.map(pic => `../${pic}`)
+      }
+      console.log(ad)
       res.render('single_ad',{ad});
   } catch(err) {
       next(err);
