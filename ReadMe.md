@@ -10,8 +10,8 @@ The app runs on ** *localhost/api/* **
 
 AnunciaLOL uses a number of open source projects to work properly:
 
-* [node.js] - evented I/O for the backend
-* [Express] - fast node.js network app framework [@tjholowaychuk]
+* [node.js](www.nodejs.com) - evented I/O for the backend
+* [Express](www.expressjs.com) - fast node.js network app framework [@tjholowaychuk]
 * [MongoDB](www.mongodb.com) - DB powered mongo Style
 * [Dillinger](https://dillinger.io) - markdown parser for newbies like me!
 
@@ -23,7 +23,6 @@ Install the dependencies and devDependencies, launnch your [DB](https://mongodb.
 
 ```sh
 $ npm install
-$ npm run dev
 ```
 
 Then initialize your DB on the application and then launch the express API to start listening to events on *LOCALHOST:3000*
@@ -31,6 +30,12 @@ Then initialize your DB on the application and then launch the express API to st
 $ npm reset_db
 $ npm run dev
 ```
+
+If you ever want to clean the image directory of the ads, just run
+```sh
+$ npm run pic_rm
+```
+
 ## AD Structure and schema
 The ADS will have the following keys and value types:
 | key | value (type) |

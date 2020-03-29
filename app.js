@@ -9,7 +9,7 @@ var app = express();
 
 //connect mongoose for mongodb
 
-require('./lib/connectMongoose')
+require('./lib/connectMongoose');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -28,7 +28,7 @@ app.locals.title = 'AnunciaLOL';
 //api routes
 
 app.use('/api/ads', require('./routes/api/ads'));
-app.use('/api/user', require('./routes/api/users'))
+app.use('/api/user', require('./routes/api/users'));
 
 
 //website routes
@@ -42,7 +42,7 @@ app.use(function(req, res, next) {
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

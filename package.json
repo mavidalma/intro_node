@@ -6,7 +6,8 @@
     "start": "cross-env NODE_ENV=production node ./bin/www",
     "dev": "cross-env DEBUG=practica:* NODE_ENV=development nodemon ./bin/www",
     "reset_db": "node reset_db.js",
-    "pic_remove": "node picture_remover.js"
+    "pic_rm": "node picture_remover.js",
+    "lint": " node ./node_modules/.bin/eslint --init"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -20,5 +21,8 @@
     "morgan": "~1.9.1",
     "multer": "^1.4.2",
     "nodemon": "^2.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0"
   }
 }
