@@ -1,9 +1,11 @@
-const fs = require('fs');
+const pics = require('fs');
 const path = require('path');
 
 const directory = './public/ad_pics';
 
-fs.readdir(directory, (err, files) => {
+pics.readdir(directory, (err, files) => {
   if (err) throw err;
-  files.forEach(picture => fs.unlinkSync(path.join(directory, picture)));
+  files.forEach(picture => pics.unlinkSync(path.join(directory, picture)));
 });
+
+module.exports = pics;

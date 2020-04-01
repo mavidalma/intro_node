@@ -25,13 +25,18 @@ Install the dependencies and devDependencies, launnch your [DB](https://mongodb.
 $ npm install
 ```
 
-Then initialize your DB on the application and then launch the express API to start listening to events on *LOCALHOST:3000*
+Then initialize your DB on the application by running this script. It will start the DB, create its schemas and two basic examples. It will also remove all pictures from public storage
+```sh
+$ npm reset_db
+```
+
+Then launch the express API to start listening to events on *LOCALHOST:3000*
 ```sh
 $ npm reset_db
 $ npm run dev
 ```
 
-If you ever want to clean the image directory of the ads, just run
+If you ever want to clean the image directory of the ads, but not reset the database, just run
 ```sh
 $ npm run pic_rm
 ```
@@ -88,7 +93,7 @@ response type: Json
 #### Login
 ```sh
 Endpoint: https://localhost:3000/api/user/login
-Request method: GET
+Request method: POST
 
 Headers:
 {
@@ -167,7 +172,7 @@ response: {
 
 #### Post AD (login required)
 
-It does not require any field. 
+It requires at least Title, price and type. Any other field is optional.
 
 ```sh
 Endpoint: https://localhost:3000/api/ads/create

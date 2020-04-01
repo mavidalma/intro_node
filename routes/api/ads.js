@@ -103,17 +103,24 @@ router.all('*', (req, res, next) => {
 router.post('/create', upload.fields([{name: 'cover', maxCount: 1}, {name: 'pictures', maxCount: 8}]), async function(req, res, next) {
   try {
     const adData =  req.body;
+
+    if(!adData.title || !adData.price || !adData.type) {
+
+      const err = new Error('You need to include a title and a price');
+      err.status = 400;
+      return next(err);
+
+    } else {
+
     const cover = req.files.cover ? 'ad_pics/' + req.files.cover[0].filename : '';
     const pictures = req.files.pictures ? req.files.pictures.map(item => 'ad_pics/' + item.filename) : [];
     const user = req.cookies.user;
     const ad = new Ad({...adData, pictures, cover, user});
     const savedAd = await ad.save();
 
-    console.log(user);
-
     res.json({success: true, ad:savedAd});
 
-    //ad user id to the ad by editing it into the USER collection
+    }
 
   } catch(err) {
     next(err);

@@ -4,6 +4,7 @@ const conn = require('./lib/connectMongoose');
 const Ad = require('./models/Ad');
 const User = require('./models/User');
 //require('mongodb');
+const pics = require('./picture_remover')
 
 conn.once('open', async() => {
   try{
@@ -11,6 +12,7 @@ conn.once('open', async() => {
     await initUsers();
     //db.ads.createIndex({description: 'text'});
     conn.close();
+    pics;
     
   } catch(err) {
     console.error('there has been an error reinitializing the DB: ', err);
