@@ -1,6 +1,6 @@
 # AnunciaLOL
 
-AnunciaLOL is an API based craigslist-like ad adminsitrator. You are very welcome to use the API by installing the APP into your system or check it out on --> **waiting for deployment**
+AnunciaLOL is an API based craigslist-like ad adminsitrator. You are very welcome to use the API by installing the APP into your system
 
 The app includes a brief frontend manager to help you with the development on ** *localhost/* **
 
@@ -19,23 +19,31 @@ AnunciaLOL uses a number of open source projects to work properly:
 
 AnunciaLOL requires [Node.js](https://nodejs.org/) v4+ to run and a MongoDB database deployed on local computer.
 
-Install the dependencies and devDependencies, launnch your [DB](https://mongodb.com) and start the server.
+The DB is based on mongoDB so if you don't have it installed on your computer, you ought to go to their website [MongoDB](www.mongodb.com) and follow their installation guide and use instructions.
 
+To correctly use anunciaLOL, first, download this repo. Then, install the dependencies and devDependencies, launnch your [DB](https://mongodb.com) and start the server.
+
+**install dependencies**
 ```sh
 $ npm install
 ```
-
+**initialize DB**
 Then initialize your DB on the application by running this script. It will start the DB, create its schemas and two basic examples. It will also remove all pictures from public storage
 ```sh
 $ npm reset_db
 ```
-
-Then launch the express API to start listening to events on *LOCALHOST:3000*
+**Launch the API on development mode**
+Then launch the express API to start listening to events on *LOCALHOST:3000* 
 ```sh
-$ npm reset_db
 $ npm run dev
 ```
+**Launch the API on production mode**
+To launch the API on production mode, you shall rather use
+```sh
+$ npm start
+```
 
+**Picture cleaner**
 If you ever want to clean the image directory of the ads, but not reset the database, just run
 ```sh
 $ npm run pic_rm
