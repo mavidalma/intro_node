@@ -2,9 +2,12 @@
 
 AnunciaLOL is an API based craigslist-like ad adminsitrator. You are very welcome to use the API by installing the APP into your system
 
-The app includes a brief frontend manager to help you with the development on ** *localhost/* **
+The app runs on ** *localhost/api/* ** however, you can check out a lite preview of the api working on *localhost/view*
 
-The app runs on ** *localhost/api/* **
+If you want to check out the API specs and docu on openAPI 2.0 language, you can install the API following this readMe and then just run the following command.
+```sh
+$ npm run swagger
+```
 
 ## Tech
 
@@ -13,7 +16,6 @@ AnunciaLOL uses a number of open source projects to work properly:
 * [node.js](www.nodejs.com) - evented I/O for the backend
 * [Express](www.expressjs.com) - fast node.js network app framework [@tjholowaychuk]
 * [MongoDB](www.mongodb.com) - DB powered mongo Style
-* [Dillinger](https://dillinger.io) - markdown parser for newbies like me!
 
 ## Installation
 
