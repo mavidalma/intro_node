@@ -9,6 +9,8 @@ If you want to check out the API specs and docu on openAPI 2.0 language, you can
 $ npm run swagger
 ```
 
+Or you can simply go to the route *localhost:3000/api/documentation*
+
 ## Tech
 
 AnunciaLOL uses a number of open source projects to work properly:

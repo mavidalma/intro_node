@@ -29,12 +29,14 @@ app.locals.title = 'AnunciaLOL';
 
 app.use('/api/ads', require('./routes/api/ads'));
 app.use('/api/user', require('./routes/api/users'));
+app.use('/api/documentation', require('./routes/api/documentation/swagger-doc'));
 
 
 //website routes
 app.use('/',      require('./routes/index'));
 app.use('/view',      require('./routes/view'));
 app.use('/users', require('./routes/users'));
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
